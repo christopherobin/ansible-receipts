@@ -2,6 +2,12 @@ import json
 import os
 import multiprocessing
 
+try:
+    from ansible.plugins.callback import CallbackBase
+except ImportError:
+    class CallbackBase(object):
+        """ shim """
+        pass
 
 def receipt_queue(queue, out_queue):
     """
@@ -20,7 +26,7 @@ def receipt_queue(queue, out_queue):
     out_queue.put('finished')
 
 
-class CallbackModule(object):
+class CallbackModule(CallbackBase):
     """
     logs ansible-playbook and ansible runs to a json file
     """
